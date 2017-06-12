@@ -39,7 +39,7 @@ var geocoder = new MapboxGeocoder({
 });
 
 map.addControl(geocoder);
-map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
 map.on('load', function () {
       map.addLayer({
@@ -104,9 +104,22 @@ map.on('mousemove', function (e) {
     // console.log(JSON.stringify(features, null, 2));
 });
 
+    
+var markerHeight = 50, markerRadius = 10, linearOffset = 25;
+var popupOffsets = {
+ 'top': [0, 0],
+ 'top-left': [0,0],
+ 'top-right': [0,0],
+ 'bottom': [0, -markerHeight],
+ 'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+ 'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+ 'left': [markerRadius, (markerHeight - markerRadius) * -1],
+ 'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+ };
+    
 map.on('click', 'risicolabels', function (e) {
   console.log(e);
-    new mapboxgl.Popup()
+    new mapboxgl.Popup({offset:popupOffsets})
         .setLngLat(e.lngLat)
         .setHTML("<b>" + e.features[0].properties['t100_huis_'] + "</b><br/>")
         .addTo(map);
