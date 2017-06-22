@@ -1,111 +1,29 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<script src='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
-<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.min.js'></script>
-<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.css' type='text/css' />
-<link href='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css' rel='stylesheet' />
-<style>
-#geocoder-container > div {
-    min-width:50%;
-    margin-left:25%;
-}
-</style>
-
+  <title>[PILOT] Risicolabel Achmea/Gemeente Schiedam</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,500,700,900&amp;subset=vietnamese" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">
+  <link href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.css' type='text/css' rel='stylesheet' />
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+  html, body {
+    background-color: #EAEFF0;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  </style>
 </head>
-
 <body>
-<div id='map' style='width: 100%; height: 100%;' />
-<script>
-
-
-
-mapboxgl.accessToken = 'pk.eyJ1IjoibmVsZW5zY2h1dXJtYW5zIiwiYSI6ImhkXzhTdXcifQ.3k2-KAxQdyl5bILh_FioCw';
-var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/light-v9',
-    zoom: 17,
-    center: [4.36700, 51.94534],
-    hash: true
-});
-
-var geocoder = new MapboxGeocoder({
-    accessToken: mapboxgl.accessToken
-});
-
-map.addControl(geocoder);
-map.addControl(new mapboxgl.NavigationControl());
-
-map.on('load', function () {
-      map.addLayer({
-          'id': 'wms-test-layer',
-          'type': 'raster',
-          'source': {
-              'type': 'raster',
-              'tiles': [
-                  'http://geodata.nationaalgeoregister.nl/luchtfoto/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image/png8&TRANSPARENT=TRUE&LAYERS=Actueel_ortho25&WIDTH=256&HEIGHT=256&SRS=EPSG:3857&STYLES=&bbox={bbox-epsg-3857}'
-              ],
-              'tileSize': 256
-          },
-          'paint': {}
-      }, 'luchtfoto25');
-
-
-      map.addLayer({
-          'id': 'risicolabels',
-          'source': {
-            type: 'vector',
-            url: 'mapbox://nelenschuurmans.d82fva5i'
-          },
-          'source-layer': 'schiedam-4vvjoo',
-          'type': 'fill',
-          'minzoom': 10,
-          // 'paint': {
-          //   'fill-color': '#ff0000'
-          // }
-          'paint': {
-            'fill-color': {
-              'property': 't100_huis_',
-              'type': 'categorical',
-              'stops': [
-                [1, '#ff0000'],
-                [2, '#223b53'],
-                [3, '#e55e5e'],
-                [4, '#3bb2d0'],
-                [5, '#cccccc'],
-                [6, '#00ffff'],
-                [7, '#0879D7'],
-              ]
-            }
-          }
-      });
-
-
-
-
-
-
-
-    // Listen for the `geocoder.input` event that is triggered when a user
-    // makes a selection and add a symbol that matches the result.
-    geocoder.on('result', function(ev) {
-        map.getSource('single-point').setData(ev.result.geometry);
-    });
-});
-
-map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point);
-    // console.log(JSON.stringify(features, null, 2));
-});
-
-map.on('click', 'risicolabels', function (e) {
-  console.log(e);
-    new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML("<b>" + e.features[0].properties['t100_huis_'] + "</b><br/>")
-        .addTo(map);
-});
-
-
-</script>
-</body></html>
+  <div id="root" />
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.min.js'></script>
+  <script src="client.js"></script>
+</body>
+</html>
